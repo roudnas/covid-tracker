@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="component-wrapper">
+  <div class="component-wrapper p-3">
     <table class="table table-sm top-ten table-hover table-striped">
   <thead>
     <tr>
