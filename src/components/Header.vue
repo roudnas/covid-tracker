@@ -54,6 +54,5 @@
 <style lang="css">
 .main {
   margin: 0 !important;
-  max-height: 25vh;
 }
 </style>
