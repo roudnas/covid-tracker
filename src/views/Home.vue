@@ -1,12 +1,12 @@
 <template>
 
   <div id="home">
-    <Header v-if="this.covidData.loaded" v-bind:data="covidData.today" />
+    <Header v-if="this.covidData.loaded" :colors="colors" v-bind:data="covidData.today" />
     <b-container fluid class="p-0 m-0">
-      <Map/>
-      <b-row class="p-0 m-0">
-        <TopTen v-bind:items="items" />
+      <Map v-bind:countryData="items"/>
+      <b-row class="p-0 m-0 justify-content-around">
         <DailyCases v-if="this.covidData.loaded" v-bind:data="this.covidData" />
+        <TopTen v-bind:items="items" />
       </b-row>
     </b-container>
 
@@ -38,7 +38,10 @@
           yesterday: {},
           twoDaysAgo: {}
         }, colors: {
-          cases: ''
+          cases: 'rgb(48, 61, 116)',
+          deaths: 'rgb(255, 99, 132)',
+          recovered: 'rgb(110, 155, 52)',
+          tests: 'rgb(250, 206, 38)'
         }
       }
     },
@@ -56,7 +59,7 @@
           .catch(err => console.error(err))
         axios
           .get(`${this.api_url}/v3/covid-19/countries?sort=cases`)
-          .then(res => (this.items = res.data.splice(0, 10)))
+          .then(res => (this.items = res.data))
           .catch(err => console.error(err))
         axios
           .get(`${this.api_url}/v3/covid-19/all?yesterday=true`)
@@ -73,9 +76,6 @@
 </script>
 
 <style scoped>
-  .linechart {
-    width: 45vw;
-  }
   * {
     margin: 0;
     padding: 0;
