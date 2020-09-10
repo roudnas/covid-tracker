@@ -1,7 +1,8 @@
 <template lang="html">
-  <div class="component-wrapper pt-3 pl-5">
-    <table class="table top-ten table-hover table-striped table-responsive">
-  <thead class="thead-dark">
+  <div class="component-wrapper pt-3 pl-5 text-center">
+    <b-spinner v-if="!this.loaded" label="Spinning"></b-spinner>
+    <table v-if="this.loaded" class="table top-ten table-hover table-striped table-responsive">
+  <thead class="thead-dark thead-sticky">
     <tr>
       <th scope="col">#</th>
       <th scope="col">Country</th>
@@ -31,13 +32,12 @@
     name: "TopTen",
     components: {
 
-    }, props: ['items']
+    }, props: ['items', 'loaded']
   }
 </script>
 
 <style scoped>
 .top-ten {
-  overflow-y: scroll;
   height:80vh;
 }
 .component-wrapper {
@@ -46,6 +46,12 @@
 .table {
   padding: 0;
   margin: 0;
+}
+.thead {
+  position: sticky;
+}
+.tbody {
+  overflow-y: scroll;
 }
 @media screen and (max-width:992px) {
   .component-wrapper {

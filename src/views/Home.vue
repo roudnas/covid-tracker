@@ -3,10 +3,11 @@
   <div id="home">
     <Header v-if="this.covidData.loaded" :colors="colors" v-bind:data="covidData.today" />
     <b-container fluid class="p-0 m-0">
-      <Map v-bind:countryData="items"/>
-      <b-row class="p-0 m-0 justify-content-around">
+      <Map v-bind:countryData="topCountriesData" />
+      <b-row class="p-0 m-0 justify-content-around text-center">
+        <b-spinner v-if="!this.covidData.loaded" type="grow" label="Spinning"></b-spinner>
         <DailyCases v-if="this.covidData.loaded" v-bind:data="this.covidData" />
-        <TopTen v-bind:items="items" />
+        <TopTen v-bind:loaded="this.topCountriesData.loaded" v-bind:items="topCountriesData.data" />
       </b-row>
     </b-container>
 
@@ -15,6 +16,7 @@
 </template>
 
 <script>
+
   import axios from 'axios'
   import Map from '../components/Map'
   import TopTen from '../components/TopTen'
@@ -27,17 +29,22 @@
       TopTen,
       Header,
       DailyCases
-    }, props: ['query'],
+    },
+    props: ['query'],
     data() {
       return {
         api_url: '',
-        items: {},
+        topCountriesData: {
+          data: {},
+          loaded: false
+        },
         covidData: {
           loaded: false,
           today: {},
           yesterday: {},
           twoDaysAgo: {}
-        }, colors: {
+        },
+        colors: {
           cases: 'rgb(48, 61, 116)',
           deaths: 'rgb(255, 99, 132)',
           recovered: 'rgb(110, 155, 52)',
@@ -48,8 +55,6 @@
     created() {
       this.api_url = process.env.VUE_APP_API_URL
       this.fillData()
-      console.log(this.$route.query)
-      console.log(this.query)
     },
     methods: {
       fillData() {
@@ -59,7 +64,8 @@
           .catch(err => console.error(err))
         axios
           .get(`${this.api_url}/v3/covid-19/countries?sort=cases`)
-          .then(res => (this.items = res.data))
+          .then(res => (this.topCountriesData.data = res.data))
+          .then(() => (this.topCountriesData.loaded = true))
           .catch(err => console.error(err))
         axios
           .get(`${this.api_url}/v3/covid-19/all?yesterday=true`)
@@ -73,9 +79,11 @@
       }
     }
   }
+
 </script>
 
 <style scoped>
+
   * {
     margin: 0;
     padding: 0;
@@ -89,4 +97,5 @@
     text-align: center;
     color: #2c3e50;
   }
+
 </style>

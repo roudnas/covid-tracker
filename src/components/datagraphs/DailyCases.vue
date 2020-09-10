@@ -79,6 +79,7 @@
         this.data.yesterday.todayRecovered,
         this.data.today.todayRecovered
       )
+      this.updateChat()
     }
   }
 
