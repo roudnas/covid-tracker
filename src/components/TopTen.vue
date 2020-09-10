@@ -38,7 +38,7 @@
 
 <style scoped>
 .top-ten {
-  height:80vh;
+  height:90vh;
 }
 .component-wrapper {
   width: 50vw;
